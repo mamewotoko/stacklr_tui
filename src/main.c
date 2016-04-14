@@ -79,13 +79,20 @@ int main(int argc,char *argv[])
   post_menu(menu);
   refresh();
   
-  while((c = getch()) != KEY_F(1)) {
+  while(TRUE){
+    c = getch();
+    if(c == KEY_F(1)
+       || c == 'q') {
+      break;
+    }
     switch(c) {
     case KEY_DOWN:
       menu_driver(menu, REQ_DOWN_ITEM);
       break;
     case KEY_UP:
       menu_driver(menu, REQ_UP_ITEM);
+      break;
+    default:
       break;
     }
   }

@@ -1,4 +1,4 @@
-stacklr_tui
+stacklr_tui [![Build Status](https://travis-ci.org/mamewotoko/stacklr_tui.svg?branch=master)](https://travis-ci.org/mamewotoko/stacklr_tui)
 ==========
 
 Text user interface of stacklr for desktop
@@ -14,15 +14,17 @@ Run
 ```
 ./stacklr_tui
 ```
-press F1 key to exit.
+press F1 or q key to exit.
 
 
 TODO
 ----
+* add enter item ui
 * file based staklr
+* change background color of group name
+* support expand/collapse
 * load items from google tasks & calendar
 * fix compile warnings
-* quit by q key
 
 ----
 Takashi Masuyama < mamewotoko@gmail.com >

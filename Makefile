@@ -5,5 +5,5 @@ stacklr_tui: src/main.c
 	$(CC) src/main.c $(CFLAGS) -lmenu -lncurses -o $@
 
 clean:
-	rm stacklr_tui *.o
+	rm -f stacklr_tui 
 
