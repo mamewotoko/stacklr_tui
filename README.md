@@ -9,6 +9,10 @@ Build
 make
 ```
 
+Prepare
+-------
+create item text (e.g. Stock.txt)
+
 Run
 ---
 ```
@@ -20,11 +24,10 @@ press F1 or q key to exit.
 TODO
 ----
 * add enter item ui
-* file based staklr
+* move data file to directory
 * change background color of group name
 * support expand/collapse
 * load items from google tasks & calendar
-* fix compile warnings
 
 ----
 Takashi Masuyama < mamewotoko@gmail.com >
