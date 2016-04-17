@@ -71,9 +71,10 @@ void init_item_list(){
 /* TODO: cache menu */
 void make_menu(){
   int menu_index = 0;
+  int i;
   list_node_t *current;
   
-  for(int i = 0; i < NUM_GROUPS; i++){
+  for(i = 0; i < NUM_GROUPS; i++){
     all_menu_item[menu_index] = new_item(groups[i][0], NULL);
     menu_index++;
     /* TODO: iterate api */
