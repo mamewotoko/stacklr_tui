@@ -5,17 +5,15 @@
 #include <menu.h>
 #include <locale.h>
 
+#include "stacklr.h"
+#include "list.h"
+
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
-#define MAX_ROWS 20
+#define MAX_ROWS 40
 #define MAX_ITEM_NAME 100
 
-typedef struct list_node {
-  char *data;
-  struct list_node *next;
-} list_node_t;
-
 //TODO: get from android values.xml
-char *groups[5][2] = {
+char *groups[NUM_GROUPS][2] = {
   { "To buy list", "To_buy_list.txt" },
   { "Stock", "Stock.txt" },
   { "Shelf", "Shelf.txt" },
@@ -23,73 +21,87 @@ char *groups[5][2] = {
   { "Later", "Later.txt" }
 };
 
-int main(int argc,char *argv[])
-{
-  ITEM **menu_items;
-  MENU *menu = NULL;
-  MENU *to_buy_submenu;
-  int i, j, cindex, item_name_index;
-  int view_index;
-  int c;
-  int n_groups;
-  int n_to_buy_items;
-  WINDOW *subwin;
-  char *itemname;
+list_node_t* item_list[NUM_GROUPS];
+ITEM* all_menu_item[MAX_ROWS];
+
+const int NEXT[NUM_GROUPS] = {
+  STOCK,
+  TO_BUY,
+  TO_BUY,
+  TO_BUY,
+  HISTORY
+};
+
+void init_item_list(){
+  int i;
+  int str_len;
+  char item_name[1024];
+  char item_name_with_indent[1024];
   char *group_filename;
-  char *line = NULL;
   FILE *file;
-  char item_name[MAX_ITEM_NAME];
-  char* item_name_indent;
-  char* item_name_list[MAX_ROWS];
-
-  setlocale(LC_ALL, "");
-  for(i = 0; i < MAX_ROWS; i++){
-    item_name_list[i] = NULL;
-  }
   
-  n_groups = ARRAY_SIZE(groups);
-  menu_items = (ITEM **)calloc(MAX_ROWS, sizeof(ITEM *));
-  view_index = 0;
-  item_name_index = 0;
-  /* TODO: covert to linked list */
-  for(i = 0; i < n_groups; i++){
-    menu_items[view_index] = new_item(groups[i][0], NULL);
-    view_index++;
+  for(i = 0; i < NUM_GROUPS; i++){
+    item_list[i] = list_new();
     group_filename = groups[i][1];
-
+    
     file = fopen(group_filename, "r");
     if(NULL == file){
-      /* display error message */
+      /* TODO: output as log file */
       fprintf(stderr, "cannot open file: %s\n", group_filename);
       continue;
     }
     while(fgets(item_name, MAX_ITEM_NAME, file) != NULL){
-      cindex = 0;
-      do {
-	if(item_name[cindex] == '\0' || item_name[cindex] == '\n'){
-	  item_name[cindex] = '\0';
-	  break;
-	}
-	cindex++;
-      }
-      while(TRUE);
-      if(cindex == 0){
-	/* empty line */
+      str_len = strlen(item_name);
+      if(0 == str_len){
 	continue;
       }
-      item_name_indent = (char*)malloc(strlen(item_name)+10);
-      sprintf(item_name_indent, "  %s", item_name);
-      /* TODO: manage by linked list */
-      item_name_list[item_name_index] = item_name_indent;
-      item_name_index++;
-      menu_items[view_index] = new_item(item_name_indent, NULL);
-      view_index++;
+      if('\n' == item_name[str_len-1]){
+	if(1 == str_len){
+	  continue;
+	}
+	item_name[str_len-1] = '\0';
+      }
+      sprintf(item_name_with_indent, "  %s", item_name);
+      list_add(item_list[i], item_name_with_indent);
     }
     fclose(file);
   }
-  menu_items[view_index] = NULL;
+}
 
-  menu = new_menu((ITEM **)menu_items);
+/* TODO: cache menu */
+void make_menu(){
+  int menu_index = 0;
+  list_node_t *current;
+  
+  for(int i = 0; i < NUM_GROUPS; i++){
+    all_menu_item[menu_index] = new_item(groups[i][0], NULL);
+    menu_index++;
+    /* TODO: iterate api */
+    current = item_list[i];
+    while(TRUE){
+      current = current->next;
+      if(NULL == current){
+	break;
+      }
+      all_menu_item[menu_index] = new_item(current->data, NULL);
+      menu_index++;
+    }
+  }
+  all_menu_item[menu_index] = NULL;
+}
+
+int main(int argc,char *argv[])
+{
+  MENU *menu = NULL;
+  int i;
+  int c;
+
+  setlocale(LC_ALL, "");
+  
+  init_item_list();
+  make_menu();
+  
+  menu = new_menu(all_menu_item);
 
   initscr();
   cbreak();
@@ -117,18 +129,22 @@ int main(int argc,char *argv[])
     }
   }
 
- finalize:
-  //child
-  for(i = 0; i < view_index; i++){
-    free_item(menu_items[i]);
+  /* finalize: */
+  for(i = 0; i < MAX_ROWS; i++){
+    if(NULL == all_menu_item[i]){
+      break;
+    }
+    free_item(all_menu_item[i]);
   }
+  
   if(NULL != menu){
     free_menu(menu);
   }
   endwin();
-  free(menu_items);
-  for(i = 0; i < item_name_index; i++){
-    free(item_name_list[i]);
+
+  /* free(menu_items); */
+  for(i = 0; i < NUM_GROUPS; i++){
+    list_free(item_list[i]);
   }
   
   return 0;

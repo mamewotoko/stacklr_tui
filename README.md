@@ -28,6 +28,9 @@ TODO
 * change background color of group name
 * support expand/collapse
 * load items from google tasks & calendar
+* Test
+  * CUnit: difficult to compile
+  * other tool
 
 ----
 Takashi Masuyama < mamewotoko@gmail.com >
