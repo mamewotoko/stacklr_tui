@@ -18,8 +18,9 @@ Run
 ```
 ./stacklr_tui
 ```
-press F1 or q key to exit.
-
+key bindings
+up, down: move focus
+F1, q:  exit.
 
 TODO
 ----
