@@ -24,14 +24,24 @@ F1, q:  exit.
 
 TODO
 ----
-* add enter item ui
-* move data file to directory
+* add minimum function
+  * add enter item ui
+  * move focused item to next group when space key is pressed
+    * refresh view
+  * save item on exit
 * change background color of group name
 * support expand/collapse
 * load items from google tasks & calendar
+  * multithread?
 * Test
   * CUnit: difficult to compile
   * other tool
+
+Reference
+---------
+* stacklr
+  * [Google play](https://play.google.com/store/apps/details?id=com.mamewo.stacklr)
+  * [GitHub](https://github.com/mamewotoko/stacklr)
 
 ----
 Takashi Masuyama < mamewotoko@gmail.com >
