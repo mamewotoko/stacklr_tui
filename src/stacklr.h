@@ -9,4 +9,6 @@
 
 #define NUM_GROUPS 5
 
+#define DATADIR "data/"
+
 #endif

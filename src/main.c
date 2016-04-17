@@ -14,11 +14,11 @@
 
 //TODO: get from android values.xml
 char *groups[NUM_GROUPS][2] = {
-  { "To buy list", "To_buy_list.txt" },
-  { "Stock", "Stock.txt" },
-  { "Shelf", "Shelf.txt" },
-  { "History", "History.txt" },
-  { "Later", "Later.txt" }
+  { "To buy list", DATADIR "To_buy_list.txt" },
+  { "Stock",  DATADIR "Stock.txt" },
+  { "Shelf",  DATADIR "Shelf.txt" },
+  { "History",  DATADIR "History.txt" },
+  { "Later",  DATADIR "Later.txt" }
 };
 
 list_node_t* item_list[NUM_GROUPS];
