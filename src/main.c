@@ -32,6 +32,13 @@ const int NEXT[NUM_GROUPS] = {
   HISTORY
 };
 
+/* index of first item */
+/**
+int group_menu_index[NUM_GROUPS] = {
+  0, 0, 0, 0, 0
+};
+*/
+
 void init_item_list(){
   int i;
   int str_len;
@@ -77,6 +84,8 @@ void make_menu(){
   for(i = 0; i < NUM_GROUPS; i++){
     all_menu_item[menu_index] = new_item(groups[i][0], NULL);
     menu_index++;
+    /* group_menu_index[i] = menu_index; */
+    
     /* TODO: iterate api */
     current = item_list[i];
     while(TRUE){
@@ -85,6 +94,7 @@ void make_menu(){
 	break;
       }
       all_menu_item[menu_index] = new_item(current->data, NULL);
+      set_item_userptr(all_menu_item[menu_index], current);
       menu_index++;
     }
   }
@@ -96,7 +106,10 @@ int main(int argc,char *argv[])
   MENU *menu = NULL;
   int i;
   int c;
-
+  /**
+   * list_node_t *node;
+   * ITEM *current_menu_item = NULL;
+   */
   setlocale(LC_ALL, "");
   
   init_item_list();
@@ -125,11 +138,16 @@ int main(int argc,char *argv[])
     case KEY_UP:
       menu_driver(menu, REQ_UP_ITEM);
       break;
+    case ' ':
+      /* push to next group */
+      /* get belonging list */
+      /* move to next */
+      break;
     default:
       break;
     }
   }
-
+  unpost_menu(menu);
   /* finalize: */
   for(i = 0; i < MAX_ROWS; i++){
     if(NULL == all_menu_item[i]){
@@ -137,10 +155,7 @@ int main(int argc,char *argv[])
     }
     free_item(all_menu_item[i]);
   }
-  
-  if(NULL != menu){
-    free_menu(menu);
-  }
+  free_menu(menu);
   endwin();
 
   /* free(menu_items); */

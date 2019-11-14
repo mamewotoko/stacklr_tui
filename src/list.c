@@ -37,6 +37,11 @@ void list_push(list_node_t* node, char* new_data){
   node->next = new_node;
 }
 
+void list_push_node(list_node_t* node, list_node_t* target){
+  target->next = node->next;
+  node->next = target;
+}
+
 /* use pointer to tail node */
 void list_add(list_node_t* node, char* new_data){
   list_node_t *new_node = malloc(sizeof(list_node_t));
@@ -53,7 +58,7 @@ void list_add(list_node_t* node, char* new_data){
   prev->next = new_node;
 }
 
-list_node_t* list_remove(list_node_t* node, int n){
+list_node_t* list_remove_by_index(list_node_t* node, int n){
   int i;
   list_node_t *prev = node;
   list_node_t *current;
@@ -68,6 +73,18 @@ list_node_t* list_remove(list_node_t* node, int n){
   prev->next = current->next;
   current->next = NULL;
   return current;
+}
+
+void list_remove_by_node(list_node_t* node, list_node_t* target){
+  list_node_t *prev = node;
+  while(NULL != prev->next){
+    if(prev->next == target){
+      prev->next = prev->next->next;
+      prev->next->next = NULL;
+    }
+    prev = prev->next;
+  }
+  /* node is not found */
 }
 
 void list_node_free(list_node_t* node){
