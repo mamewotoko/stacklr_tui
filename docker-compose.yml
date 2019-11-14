@@ -1,0 +1,7 @@
+version: '3'
+
+services:
+  stacklr_tui:
+    build: .
+    volumes:
+      - .:/work

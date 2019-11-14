@@ -5,22 +5,45 @@ Text user interface of stacklr for desktop
 
 Build
 -----
+
 ```
 make
 ```
 
 Prepare
 -------
-create item text (e.g. Stock.txt)
+create item text (e.g. data/Stock.txt)
 
-Run
----
+Run (ubuntu)
+-------------
+
 ```
 ./stacklr_tui
 ```
 key bindings
 up, down: move focus
 F1, q:  exit.
+
+Run (docker)
+-------------
+
+1. build docker container image
+
+```
+docker-compose build
+```
+
+2. build stackr_tui app
+
+```
+docker-compose run stacklr_tui make
+```
+
+3. run stackr_tui app
+
+```
+docker-compose run --entrypoint ./stacklr_tui  stacklr_tui
+```
 
 TODO
 ----
